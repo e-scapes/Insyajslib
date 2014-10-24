@@ -1,3 +1,51 @@
+//<editor-fold defaultstate="collapsed" desc="plugins">
+(function ($) {
+    $.fn.drags = function (opt) {
+
+        opt = $.extend({disabled: false, handle: "", cursor: "move"}, opt);
+        var $el = this;
+        var $handle = this;
+        if (!opt.disabled) {
+
+
+            if (opt.handle !== "") {
+                $handle = this.find(opt.handle);
+            }
+            $handle.css('cursor', opt.cursor);
+            return $handle.on("mousedown", function (e) {
+                var $drag = $el.addClass('draggable');
+                console.log($drag);
+                var z_idx = $drag.css('z-index'),
+                        drg_h = $drag.outerHeight(),
+                        drg_w = $drag.outerWidth(),
+                        pos_y = $drag.offset().top + drg_h - e.pageY,
+                        pos_x = $drag.offset().left + drg_w - e.pageX;
+                $drag.css('z-index', 1000).parents().on("mousemove", function (e) {
+                    $('.draggable').offset({
+                        top: e.pageY + pos_y - drg_h,
+                        left: e.pageX + pos_x - drg_w
+                    }).on("mouseup", function () {
+                        $el.removeClass('draggable').css('z-index', z_idx);
+                    });
+                });
+                e.preventDefault(); // disable selection
+            }).on("mouseup", function () {
+
+                $el.removeClass('draggable');
+            });
+
+        } else {
+
+
+
+
+        }
+
+
+    }
+})(jQuery);
+//</editor-fold>
+
 //<editor-fold defaultstate="collapsed" desc="helper">
 
 function getTypeFunction(o) {
@@ -33,15 +81,15 @@ function getTypeFunction(o) {
 
 function getObjectFunction(o) {
     var r = null;
-    if (ESX.getType(o) === "class") {
+    if (IN.getType(o) === "class") {
         o = o.substr(1);
         r = document.getElementsByClassName(o)[0];
-    } else if (ESX.getType(o) === "id") {
+    } else if (IN.getType(o) === "id") {
         o = o.substr(1);
         r = document.getElementById(o)
-    } else if (ESX.getType(o) === "string") {
+    } else if (IN.getType(o) === "string") {
         r = document.getElementsByTagName(o)
-    } else if (ESX.getType(o) === "object") {
+    } else if (IN.getType(o) === "object") {
         r = o;
     }
     return r;
@@ -53,7 +101,7 @@ function positionFunction(ob, options) {
     var myleft = options['left'];
     var myright = options['right'];
     var mybottom = options['bottom'];
-    var object = ESX.getObject(ob);
+    var object = IN.getObject(ob);
     //<editor-fold defaultstate="collapsed" desc="Y options">
     if (options['y'] === "top") {
         mytop = "1px";
@@ -83,7 +131,7 @@ function positionFunction(ob, options) {
     }
 //</editor-fold>
 
-//<editor-fold defaultstate="collapsed" desc="X Options">
+    //<editor-fold defaultstate="collapsed" desc="X Options">
 
     if (options['x'] === "left") {
         myleft = "1px";
@@ -158,12 +206,12 @@ function setTagFunction(type, options) {
     return r;
 }
 
-function seteventsActionsFunction(object, type, options) {
+function setEventsActionsFunction(object, type, options) {
 
     function  getData() {
         var r = {};
         var s = "." + options['parentClass'];
-        $(s + " input ," + s + " select ," + s + " textarea").each(function() {
+        $(s + " input ," + s + " select ," + s + " textarea").each(function () {
             var name = $(this).attr("name");
             if ($(this).val()) {
                 r[name] = $(this).val();
@@ -190,12 +238,12 @@ function seteventsActionsFunction(object, type, options) {
     }
 
 
-    this.do = function() {
+    this.do = function () {
         if (type === "onclick") {
             if (typeof options === "function") {
                 object.onclick = options;
             } else {
-                object.onclick = function() {
+                object.onclick = function () {
                     eventaciotns();
                 };
             }
@@ -204,7 +252,7 @@ function seteventsActionsFunction(object, type, options) {
             if (typeof options === "function") {
                 object.onchange = options;
             } else {
-                object.onchange = function() {
+                object.onchange = function () {
                     eventaciotns();
                 };
             }
@@ -213,7 +261,7 @@ function seteventsActionsFunction(object, type, options) {
             if (typeof options === "function") {
                 object.onload = options;
             } else {
-                object.onload = function() {
+                object.onload = function () {
                     eventaciotns();
                 };
             }
@@ -222,7 +270,7 @@ function seteventsActionsFunction(object, type, options) {
             if (typeof options === "function") {
                 object.onmouseout = options;
             } else {
-                object.onmouseout = function() {
+                object.onmouseout = function () {
                     eventaciotns();
                 };
             }
@@ -231,7 +279,7 @@ function seteventsActionsFunction(object, type, options) {
             if (typeof options === "function") {
                 object.onmouseout = options;
             } else {
-                object.onkeydown = function() {
+                object.onkeydown = function () {
                     eventaciotns();
                 };
             }
@@ -240,7 +288,7 @@ function seteventsActionsFunction(object, type, options) {
             if (typeof options === "function") {
                 object.onmouseover = options;
             } else {
-                object.onmouseover = function() {
+                object.onmouseover = function () {
                     eventaciotns();
                 };
             }
@@ -258,96 +306,73 @@ function seteventsActionsFunction(object, type, options) {
 
 }
 
-function setCanvasFunction(options) {
-
-
-
-    var c = ESX.setTag("canvas", options);
-    var Context = c.getContext("2d");
-    if (options['height']) {
-        c.height = options['height'];
-    }
-    if (options['width']) {
-        c.width = options['width'];
-    }
-    Context.save();
-    Context.translate(3, 10);
-    // r.rotate(20 * Math.PI / 180);
-    Context.rotate(Math.PI / 2);
-    Context.fillText(options['data'], 1, 1);
-    Context.fillStyle = 'blue';
-    return c;
-}
-
-
 
 //</editor-fold>
 
 //<editor-fold defaultstate="collapsed" desc="chrts">
 
 function chartsFunction(object, options) {
-    
-    this._render = function() {
-        window.onload = function() {
-            
-            
-            
-            
+
+    this._render = function () {
+        window.onload = function () {
+
+
+
+
             if (!options['width']) {
-                
+
                 options['width'] = "200px";
             }
-            
+
             if (!options['height']) {
-                
+
                 options['height'] = "200px";
             }
-            var c = ESX.setTag("canvas", {
+            var c = IN.setTag("canvas", {
                 height: options['height'], width: options['width']
-                
-                
+
+
             });
-            
-            
+
+
             if (!object) {
-                
+
                 object = document.body;
             } else {
-                
-                object = ESX.getObject(object);
-                
+
+                object = IN.getObject(object);
+
             }
-            
+
             object.appendChild(c);
-            
+
             var ctx = c.getContext("2d");
-            
+
             if (options['chartType'] === "line") {
-                window.myLine = new Chart(ctx).Line(options, {responsive: true});
-                
+                //  window.myLine = new Chart(ctx).Line(options, {responsive: true});
+
             } else if (options['chartType'] === "radar") {
-                
-                window.myRadar = new Chart(ctx).Radar(options, {responsive: true});
-                
+
+                //  window.myRadar = new Chart(ctx).Radar(options, {responsive: true});
+
             } else if (options['chartType'] === "polarArea") {
-                window.myPolarArea = new Chart(ctx).PolarArea(options, {responsive: true});
-                
+                //   window.myPolarArea = new Chart(ctx).PolarArea(options, {responsive: true});
+
             } else if (options['chartType'] === "pie") {
-                window.myPie = new Chart(ctx).Pie(options);
-                
+                //  window.myPie = new Chart(ctx).Pie(options);
+
             } else if (options['chartType'] === "doughnut") {
-                window.myDoughnut = new Chart(ctx).Doughnut(options, {responsive: true});
-                
+                // window.myDoughnut = new Chart(ctx).Doughnut(options, {responsive: true});
+
             } else {
-                window.myBar = new Chart(ctx).Bar(options, {responsive: true})
-                
+                //  window.myBar = new Chart(ctx).Bar(options, {responsive: true})
+
             }
         };
     }
 }
 
 //</editor-fold>
-
 
 //<editor-fold defaultstate="collapsed" desc="html">
 
@@ -360,14 +385,14 @@ function html(options, cols, parentClass) {
     }
 
 
-    this.renderInput = function(type, options) {
+    this.renderInput = function (type, options) {
         var c = type;
         if (options['class']) {
             c += " " + options['class'];
         }
         options['class'] = c;
 
-        var r = ESX.setTag("input", options);
+        var r = IN.setTag("input", options);
 
         r.setAttribute('type', type);
 
@@ -378,15 +403,15 @@ function html(options, cols, parentClass) {
     };
 
 
-    this.createDate = function(selectore, options) {
-        $(function() {
-            $(selectore).datepicker(options);
-        })
+    this.createDate = function (selectore, options) {
+        /* $(function () {
+         $(selectore).datepicker(options);
+         })*/
     };
 
 
 
-    this.input = function(type, options) {
+    this.input = function (type, options) {
         var r = "";
         if (type === "label") {
         } else if (type === "table") {
@@ -396,14 +421,14 @@ function html(options, cols, parentClass) {
         }
         else if (type === "date") {
             r = this.renderInput("text", options);
-            var i = ESX.xactions().uniqid();
+            var i = IN.xactions().uniqid();
             this.createDate("." + i, options);
             r.className = i + " i_date";
         }
         else if (type === "chart") {
 
 
-            r = ESX.setTag("div",
+            r = IN.setTag("div",
                     options);
 
 
@@ -422,12 +447,12 @@ function html(options, cols, parentClass) {
 
 
 
-    this.countener = function(databody, title, o) {
+    this.countener = function (databody, title, o) {
 
-        var newDiv = ESX.setTag("div", o);
+        var newDiv = IN.setTag("div", o);
         if (title) {
-            var title = ESX.setTag("label", {data: title})
-            var alltitle = ESX.setTag("div", {class: "e-title"});
+            var title = IN.setTag("label", {data: title})
+            var alltitle = IN.setTag("div", {class: "e-title"});
             alltitle.appendChild(title);
             newDiv.appendChild(alltitle);
         }
@@ -436,13 +461,13 @@ function html(options, cols, parentClass) {
     };
 
 
-    this._renderhtml = function() {
+    this._renderhtml = function () {
         return this._renderobject().outerHTML;
     };
 
 
-    this._renderobject = function() {
-        var all = ESX.setTag("div", {});
+    this._renderobject = function () {
+        var all = IN.setTag("div", {});
 
         for (var i = 0; i < options.length; i++) {
 
@@ -452,36 +477,36 @@ function html(options, cols, parentClass) {
             if (options[i]['e_onclick']) {
 
                 options[i]['e_onclick']['parentClass'] = parentClass;
-                ESX.setEvent(t, "onclick", options[i]['e_onclick']).do();
+                IN.setEvent(t, "onclick", options[i]['e_onclick']).do();
             }
 
             if (options[i]['e_onchange']) {
 
                 options[i]['e_onchange']['parentClass'] = parentClass;
-                ESX.setEvent(t, "onchange", options[i]['e_onchange']).do();
+                IN.setEvent(t, "onchange", options[i]['e_onchange']).do();
             }
 
             if (options[i]['e_onload']) {
 
                 options[i]['e_onload']['parentClass'] = parentClass;
-                ESX.setEvent(t, "onload", options[i]['e_onload']).do();
+                IN.setEvent(t, "onload", options[i]['e_onload']).do();
             }
 
             if (options[i]['e_onmouseout']) {
 
                 options[i]['e_onmouseout']['parentClass'] = parentClass;
-                ESX.setEvent(t, "onmouseout", options[i]['e_onmouseout']).do();
+                IN.setEvent(t, "onmouseout", options[i]['e_onmouseout']).do();
             }
 
             if (options[i]['e_onkeydown']) {
 
                 options[i]['e_onkeydown']['parentClass'] = parentClass;
-                ESX.setEvent(t, "onkeydown", options[i]['e_onkeydown']).do();
+                IN.setEvent(t, "onkeydown", options[i]['e_onkeydown']).do();
             }
             if (options[i]['e_onmouseover']) {
 
                 options[i]['e_onmouseover']['parentClass'] = parentClass;
-                ESX.setEvent(t, "onmouseover", options[i]['e_onmouseover']).do();
+                IN.setEvent(t, "onmouseover", options[i]['e_onmouseover']).do();
             }
 
 
@@ -489,7 +514,7 @@ function html(options, cols, parentClass) {
 
 
 
-            var allinput = ESX.setTag("div", {class: "e-input"});
+            var allinput = IN.setTag("div", {class: "e-input"});
             allinput.appendChild(t);
 
 
@@ -543,10 +568,12 @@ function html(options, cols, parentClass) {
 }
 //</editor-fold>
 
+//<editor-fold defaultstate="collapsed" desc="countener">
+
 function countenerfunction(xtype, options) {
 
-    var myid = ESX.xactions().uniqid();
-    this.data = function() {
+    var myid = IN.xactions().uniqid();
+    this.data = function () {
 
         //<editor-fold defaultstate="collapsed" desc="vars">
         var wcolumns = 4;
@@ -605,7 +632,7 @@ function countenerfunction(xtype, options) {
         //</editor-fold>
 
 
-        var w = ESX.setTag("div", {
+        var w = IN.setTag("div", {
             height: myheight,
             width: mywidth,
             class: xtype + " e-countener " + myid + headerPosition + barPosition
@@ -637,33 +664,22 @@ function countenerfunction(xtype, options) {
 
 
             //<editor-fold defaultstate="collapsed" desc="panels">
-
-//panelsoptions[i]['headerPosition']
+            //panelsoptions[i]['headerPosition']
             if (!panelsoptions[i]['headerPosition']) {
                 panelsoptions[i]['headerPosition'] = options['headerPosition'];
-
-
-
             }
 
             if (!panelsoptions[i]['barPosition']) {
                 panelsoptions[i]['barPosition'] = options['barPosition'];
-
-
-
             }
 
             if (!panelsoptions[i]['columns']) {
                 panelsoptions[i]['columns'] = wcolumns;
-
-
-
             }
 
             var thisOptions = panelsoptions[i];
 
-
-            var panelid = ESX.xactions().uniqid();
+            var panelid = IN.xactions().uniqid();
 
             var panelo = {
                 class: xtype + "item " + panelid
@@ -676,19 +692,16 @@ function countenerfunction(xtype, options) {
 
             }
 
+            var panel = IN.setTag("div", panelo);
 
-
-
-            var panel = ESX.setTag("div", panelo);
-
-            //<editor-fold defaultstate="collapsed" desc="titilbar">
+            //<editor-fold defaultstate="collapsed" desc="titleBar">
 
             var titleo = {
                 class: xtype + "_title titlebar e-titlebar"
             };
 
             if (xtype === "e-accordion") {
-                titleo.onclick = function(e) {
+                titleo.onclick = function (e) {
                     //alert(document.getElementsByClassName(myid)[0].getElementsByClassName("e-accordionitem").length);
 
                     var eitems = document.getElementsByClassName(myid)[0].getElementsByClassName("e-accordionitem");
@@ -711,17 +724,17 @@ function countenerfunction(xtype, options) {
 
                 };
             }
-            var title = ESX.setTag("div", titleo);
+            var title = IN.setTag("div", titleo);
 
-            var body = ESX.setTag("div", {
+            var body = IN.setTag("div", {
                 class: xtype + "-content e-content"
             });
 
             if (panelsoptions[i]['title']) {
-                var titledata = ESX.setTag("div", {
+                var titledata = IN.setTag("div", {
                     class: xtype + "_title_data "
                 });
-                var spand = ESX.setTag("span", {
+                var spand = IN.setTag("span", {
                     data: panelsoptions[i]['title']
                 });
                 titledata.appendChild(spand);
@@ -731,30 +744,24 @@ function countenerfunction(xtype, options) {
 
             //<editor-fold defaultstate="collapsed" desc="window-actions">
 
-            var wactions = ESX.setTag("div", {
+            var wactions = IN.setTag("div", {
                 class: "e-window-actions"
             });
             if (options['minusButton'] !== false) {
 
                 var ismin = false;
                 var lastheight = null;
-                var titlebtminus = ESX.setTag("i", {
+                var titlebtminus = IN.setTag("i", {
                     class: "fa fa-minus",
-                    onclick: function() {
+                    onclick: function () {
 
-                        console.log(thisOptions);
                         if (ismin) {
                             ismin = false;
-
-
                             if (thisOptions['headerPosition'] === "right" || thisOptions['headerPosition'] === "left") {
                                 w.style.width = lastheight + "px";
                             } else {
                                 w.style.height = lastheight + "px";
                             }
-
-
-
                         } else {
                             ismin = true;
                             if (thisOptions['headerPosition'] === "right" || thisOptions['headerPosition'] === "left") {
@@ -785,8 +792,8 @@ function countenerfunction(xtype, options) {
                 var maxLastwidth = 0;
                 var maxLasttop = 0;
                 var maxLastleft = 0;
-                var titlebtmax = ESX.setTag("i", {
-                    class: "fa fa-square-o", onclick: function() {
+                var titlebtmax = IN.setTag("i", {
+                    class: "fa fa-square-o", onclick: function () {
 
                         if (max) {
                             max = false;
@@ -820,14 +827,22 @@ function countenerfunction(xtype, options) {
 
             if (options['tackButton'] !== false) {
                 var tack = false;
-                var titlebttack = ESX.setTag("i", {
-                    class: "fa fa-thumb-tack", onclick: function() {
+                var titlebttack = IN.setTag("i", {
+                    class: "fa fa-thumb-tack", onclick: function () {
                         if (tack) {
                             tack = false;
-                            $(w).draggable({cursor: "move", handle: ".titlebar", disabled: false});
+                            IN.setEffect("drag", {
+                                name: w,
+                                cursor: "move",
+                                handle: ".titlebar", disabled: false
+                            })
+
+
                         } else {
                             tack = true;
-                            $(w).draggable({disabled: true});
+                            IN.setEffect("drag", {
+                                name: w, disabled: true
+                            })
                         }
                     }
                 });
@@ -835,8 +850,8 @@ function countenerfunction(xtype, options) {
             }
             if (options['closeButton'] !== false) {
 
-                var titlebtclose = ESX.setTag("i", {
-                    class: "fa fa-times", onclick: function() {
+                var titlebtclose = IN.setTag("i", {
+                    class: "fa fa-times", onclick: function () {
                         w.parentElement.removeChild(w);
                     }
                 });
@@ -876,6 +891,7 @@ function countenerfunction(xtype, options) {
                 title.style.width = "100%";
             }
             //</editor-fold>
+
             title.appendChild(wactions);
             panel.appendChild(title);
 
@@ -895,7 +911,7 @@ function countenerfunction(xtype, options) {
 
             if (thisOptions['bar']) {
 
-                var actionsbar = ESX.setTag("div", {
+                var actionsbar = IN.setTag("div", {
                     class: xtype + "-actions-bar  actions-bar e-actions-bar "
                 });
 
@@ -973,7 +989,7 @@ function countenerfunction(xtype, options) {
 
         }
 
-        ESX.setPosition(w, options);
+        IN.setPosition(w, options);
 
         return w;
     }
@@ -981,23 +997,30 @@ function countenerfunction(xtype, options) {
 
 
 
-    this._render = function() {
+    this._render = function () {
         var w = this.data();
         document.body.appendChild(w);
-        ESX.setPosition(w, options);
-        $(function() {
+        IN.setPosition(w, options);
+        $(function () {
 
             if (options['draggable'] !== false) {
-                $(w).draggable({cursor: "move", handle: ".titlebar"});
+
+                IN.setEffect("drag", {
+                    name: w,
+                    cursor: "move",
+                    handle: ".titlebar", disabled: false
+                })
+
             }
             if (options['resizable'] !== false) {
-                $(w).resizable(options);
+                //$(w).resizable(options);
             }
 
         })
 
     };
 }
+//</editor-fold>
 
 //<editor-fold defaultstate="collapsed" desc="create"> 
 function createfunction(xtype, options) {
@@ -1022,645 +1045,59 @@ function createfunction(xtype, options) {
 //<editor-fold defaultstate="collapsed" desc="actionsfunction">
 
 function actionsfunction(xtype, options) {
-    this.uniqid = function() {
+    this.uniqid = function () {
         var ts = String(new Date().getTime()), i = 0, out = '';
         for (i = 0; i < ts.length; i += 2) {
             out += Number(ts.substr(i, 2)).toString(36);
         }
         return (out);
     }
-    this.tooltip = function(selector, options) {
+    this.tooltip = function (selector, options) {
         $(selector).tooltip(options);
     }
 }
 
 //</editor-fold>
 
+function setEffectFunction(type, obj) {
+    if (type === "drag" || type === "e-drag") {
+
+        var $el = $(IN.getObject(obj.name));
+        $el.drags(obj);
+
+        $el.unbind( $el.drags(obj));
+        $el.off('drags');
+    }
+}
 
 
-
-
-var ESX = {
-    xcreate: function(xtype, options) {
+var IN = {
+    xcreate: function (xtype, options) {
         return createfunction(xtype, options);
     },
-    xactions: function(xtype, options) {
+    xactions: function (xtype, options) {
         return new actionsfunction(xtype, options);
     },
-    setPosition: function(obj, options) {
+    setPosition: function (obj, options) {
         return  positionFunction(obj, options);
     },
-    setTag: function(type, options) {
+    setTag: function (type, options) {
         return  setTagFunction(type, options);
     },
-    setCanvas: function(options) {
-        return  setCanvasFunction(options);
-    }, setEvent: function(obj, type, options) {
-        return  new seteventsActionsFunction(obj, type, options);
+    setCanvas: function (options) {
+
+    }, setEvent: function (obj, type, options) {
+        return  new setEventsActionsFunction(obj, type, options);
     },
-    getType: function(obj) {
+    getType: function (obj) {
         return  getTypeFunction(obj);
     },
-    getObject: function(obj) {
+    getObject: function (obj) {
 
         return  getObjectFunction(obj)
+    },
+    setEffect: function (type, obj) {
+
+        return  setEffectFunction(type, obj);
     }
-
-
-
 };
-$(function() {
-
-
-
-    /*
-     
-     ESX.xcreate("window", {
-     x: "center",
-     y: "center",
-     height: "200px",
-     width: "200px",
-     title: "this is test",
-     headerPosition: "left"
-     , items: [
-     {
-     columns: 2,
-     name: "test",
-     type: "text",
-     value: "a1"
-     },
-     {
-     name: "test2",
-     type: "text",
-     value: "a2",
-     title: "mydata",
-     titlePosition: "right"
-     }
-     ]
-     
-     }),
-     ESX.xcreate("window", {
-     x: "center",
-     y: "top",
-     height: "200px",
-     width: "200px",
-     title: "this is test",
-     headerPosition: "right"
-     
-     })
-     */
-    /*
-     ESX.xcreate("window", {
-     x: "right",
-     y: "top",
-     height: "200px",
-     width: "200px",
-     barPosition:"bottom",
-     headerPosition:"bottom",
-     title: "this is test aziz",
-     columns:2
-     ,bar: [
-     {
-     columns: 2,
-     name: "button",
-     type: "button",
-     value: "a1",
-     e_onclick:function (){
-     
-     
-     
-     }
-     
-     }, {
-     columns: 2,
-     name: "button",
-     type: "button",
-     value: "a1"
-     
-     }],
-     items: [
-     {
-     columns: 2,
-     name: "test",
-     type: "text",
-     value: "a1"
-     },
-     {
-     name: "test2",
-     type: "text",
-     value: "a2",
-     title: "mydata",
-     titlePosition: "right"
-     },
-     {
-     name: "test2",
-     type: "text",
-     value: "a2",
-     title: "mydata",
-     },
-     {
-     name: "test2",
-     type: "text",
-     value: "a2",
-     title: "mydata",
-     titlePosition: "left"
-     }
-     ]
-     
-     })
-     
-     
-     */
-  /*  var randomScalingFactor = function() {
-        return Math.round(Math.random() * 100)
-    };
-
-    ESX.xcreate("e-chart", {
-        type: "radar",
-        
-        labels: ["January", "February", "March", "April", "May", "June", "July"],
-        datasets: [
-            {
-                fillColor: "rgba(220,220,220,0.5)",
-                strokeColor: "rgba(220,220,220,0.8)",
-                highlightFill: "rgba(220,220,220,0.75)",
-                highlightStroke: "rgba(220,220,220,1)",
-                data: [5, 15, 25, 2, 4, 1, 5]
-            },
-            {
-                fillColor: "rgba(151,187,205,0.5)",
-                strokeColor: "rgba(151,187,205,0.8)",
-                highlightFill: "rgba(151,187,205,0.75)",
-                highlightStroke: "rgba(151,187,205,1)",
-                data: [5, 5, 5, 5, 5, 5, 5]
-            }
-        ]});*/
-
-
-
-    ESX.xcreate("e-panels", {
-        x: "left",
-        y: "top",
-        height: "300px",
-        width: "60%",
-        headerPosition: "top",
-        barPosition: "bottom",
-        panels: [
-            {
-                height: "100%",
-                width: "50%",
-                title: "this is test",
-                itemColumns: 2,
-                barColumns: 6,
-                bar: [
-                    {
-                        columns: 2,
-                        name: "button",
-                        type: "button",
-                        value: "a1"
-
-                    }, {
-                        columns: 2,
-                        name: "button",
-                        type: "button",
-                        value: "a1"
-
-                    }],
-                items:
-                        [
-                            {
-                                columns: 2,
-                                name: "name",
-                                type: "date",
-                                value: "",
-                                numberOfMonths: 3,
-                                showButtonPanel: true
-
-                            },
-                            {
-                                name: "test2",
-                                type: "text",
-                                value: "a2",
-                                title: "mydata",
-                                titlePosition: "right"
-                            },
-                            {
-                                name: "test2",
-                                type: "chart",
-                                chartType:"radar",
-                                labels: ["January", "February", "March", "April", "May", "June", "July"],
-                                datasets: [
-                                    {
-                                        fillColor: "rgba(220,220,220,0.5)",
-                                        strokeColor: "rgba(220,220,220,0.8)",
-                                        highlightFill: "rgba(220,220,220,0.75)",
-                                        highlightStroke: "rgba(220,220,220,1)",
-                                        data: [5, 15, 25, 2, 4, 1, 5]
-                                    },
-                                    {
-                                        fillColor: "rgba(151,187,205,0.5)",
-                                        strokeColor: "rgba(151,187,205,0.8)",
-                                        highlightFill: "rgba(151,187,205,0.75)",
-                                        highlightStroke: "rgba(151,187,205,1)",
-                                        data: [5, 5, 5, 5, 5, 5, 5]
-                                    }
-                                ]
-                            },
-                            {
-                                name: "test2",
-                                type: "text",
-                                value: "a2",
-                                title: "mydata",
-                                titlePosition: "left"
-                            }
-                        ]
-            }, {height: "100%",
-                width: "50%",
-                title: "this is test2",
-                bar: [
-                    {
-                        columns: 2,
-                        name: "button",
-                        type: "button",
-                        value: "a1"
-
-                    }, {
-                        columns: 2,
-                        name: "button",
-                        type: "button",
-                        value: "a1"
-
-                    }],
-                items: [
-                    {
-                        columns: 2,
-                        name: "test",
-                        type: "text",
-                        value: "a1"
-                    },
-                    {
-                        name: "test2",
-                        type: "text",
-                        value: "a2",
-                        title: "mydata",
-                        titlePosition: "right"
-                    },
-                    {
-                        name: "test2",
-                        type: "text",
-                        value: "a2",
-                        title: "mydata",
-                    },
-                    {
-                        name: "test2",
-                        type: "text",
-                        value: "a2",
-                        title: "mydata",
-                        titlePosition: "left"
-                    }
-                ]
-            },
-        ]
-
-    })
-
-
-
-    /*
-     
-     ESX.xcreate("e-accordion", {
-     x: "left",
-     y: "bottom",
-     height: "200px",
-     width: "200px",
-     headerPosition: "bottom",
-     barPosition: "bottom",
-     panels: [
-     {
-     title: "this is test",
-     bar: [
-     {
-     columns: 2,
-     name: "button",
-     type: "button",
-     value: "a1"
-     
-     }, {
-     columns: 2,
-     name: "button",
-     type: "button",
-     value: "a1"
-     
-     }],
-     items: [
-     {
-     columns: 2,
-     name: "test",
-     type: "text",
-     value: "a1"
-     },
-     {
-     name: "test2",
-     type: "text",
-     value: "a2",
-     title: "mydata",
-     titlePosition: "right"
-     },
-     {
-     name: "test2",
-     type: "text",
-     value: "a2",
-     title: "mydata",
-     },
-     {
-     name: "test2",
-     type: "text",
-     value: "a2",
-     title: "mydata",
-     titlePosition: "left"
-     }
-     ]
-     }, {
-     title: "this is test2",
-     bar: [
-     {
-     columns: 2,
-     name: "button",
-     type: "button",
-     value: "a1"
-     
-     }, {
-     columns: 2,
-     name: "button",
-     type: "button",
-     value: "a1"
-     
-     }],
-     items: [
-     {
-     columns: 2,
-     name: "test",
-     type: "text",
-     value: "a1"
-     },
-     {
-     name: "test2",
-     type: "text",
-     value: "a2",
-     title: "mydata",
-     titlePosition: "right"
-     },
-     {
-     name: "test2",
-     type: "text",
-     value: "a2",
-     title: "mydata",
-     },
-     {
-     name: "test2",
-     type: "text",
-     value: "a2",
-     title: "mydata",
-     titlePosition: "left"
-     }
-     ]
-     },
-     ]
-     
-     })
-     
-     
-     
-     
-     
-     
-     
-     ESX.xcreate("window", {
-     x: "left",
-     y: "center",
-     height: "200px",
-     width: "200px",
-     title: "this is test",
-     barPosition: "left",
-     bar: [
-     {
-     columns: 2,
-     name: "button",
-     type: "button",
-     value: "a1", e_onclick: function() {
-     alert("ssssss");
-     
-     }
-     
-     }, {
-     columns: 2,
-     name: "button",
-     type: "button",
-     value: "a1",
-     e_onclick: {
-     type: "getdata"
-     
-     }
-     
-     }],
-     items: [
-     {
-     columns: 2,
-     name: "test",
-     type: "text",
-     value: "a1"
-     },
-     {
-     name: "test2",
-     type: "text",
-     value: "a2",
-     title: "mydata",
-     titlePosition: "right"
-     }
-     ]
-     })
-     
-     
-     
-     
-     ESX.xcreate("tabs", {
-     x: "right",
-     y: "top",
-     height: "200px",
-     width: "200px",
-     title: "this is test",
-     headerPosition: "bottom",
-     barPosition: "bottom",
-     bar: [
-     {
-     columns: 2,
-     name: "button",
-     type: "button",
-     value: "a1"
-     
-     }, {
-     columns: 2,
-     name: "button",
-     type: "button",
-     value: "a1"
-     
-     }],
-     items: [
-     {
-     columns: 2,
-     name: "test",
-     type: "text",
-     value: "a1"
-     },
-     {
-     name: "test2",
-     type: "text",
-     value: "a2",
-     title: "mydata",
-     titlePosition: "right"
-     },
-     {
-     name: "test2",
-     type: "text",
-     value: "a2",
-     title: "mydata",
-     },
-     {
-     name: "test2",
-     type: "text",
-     value: "a2",
-     title: "mydata",
-     titlePosition: "left"
-     }
-     ]
-     
-     })
-     
-     
-     /*  $(".test").html(
-     ESX.xcreate("html", {
-     xtype: "date"
-     , name: "name"
-     , showButtonPanel: true
-     }))*/
-
-    //    $(".testinput").datepicker();
-
-
-
-})
-/*
- 
- var items =  [
- {
- xtype: 'text',
- fieldLabel: 'First Name',
- name: 'firstName'
- 
- },
- {
- xtype: 'checkbox',
- fieldLabel: 'Last Name',
- name: 'lastName'
- },
- {
- xtype: 'datefield',
- fieldLabel: 'Date of Birth',
- name: 'birthDate'
- }
- ];
- 
- 
- ESX.create('windows', {//Panel , massage ,tolltip
- title: 'User Form',
- height: 150,
- width: 300,
- bodyPadding: 10,
- theme:red,
- 
- ,items,
- bar: [
- {
- xtype: 'button',
- fieldLabel: 'send',
- name: 'send'
- 
- 
- },
- {
- xtype: 'button',
- fieldLabel: 'cancel',
- name: 'cancel'
- }
- ]
- 
- 
- 
- });
- 
- 
- ESC.create('button', {
- text: 'Click Me',
- listeners: {
- click: function() {
- ESC.Msg.alert('I was clicked!');
- },
- click: function() {
- ESC.Msg.alert('I was clicked!');
- }
- , click: function() {
- ESC.Msg.alert('I was clicked!');
- }
- }
- });
- 
- 
- 
- 
- ESC.Msg.alert('I was clicked!', {
- });
- 
- 
- 
- 
- 
- ESC.define('session',
- {
- username: "#ismail",
- password: "3mrmosho",
- password: "3mrmosho",
- password: "3mrmosho",
- password: "3mrmosho",
- password: "3mrmosho",
- password: "3mrmosho"
- 
- }
- )
- 
- 
- 
- ESC.define('rquest',
- {
- //  xtype: "ajax",
- method: "post", //get
- url: "www.******.com",
- options: [
- {
- id: "1",
- name: "ismial"
- }
- ],
- succ: function(data) {
- 
- 
- },
- error: function(data) {
- 
- 
- }
- }
- )
- 
- 
- 
- */
