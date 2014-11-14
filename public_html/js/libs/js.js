@@ -5,7 +5,7 @@ IN.xcreate("window", {
     y: "center",
     height: "200px",
     width: "200px",
-    title: "this is test",
+    title: "this is test2",
     headerPosition: "top"
     , items: [
         {
