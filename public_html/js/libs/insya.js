@@ -828,12 +828,7 @@ function countenerfunction(xtype, options) {
             });
             wactions.style.position = "absolute ";
             wactions.style.bottom = 0 + "px";
-
-
-
-
             if (thisOptions['headerPosition'] === "right" || thisOptions['headerPosition'] === "left") {
-
                 wactions.style.height = actionsButtons.length * 30 + "px";
                 body.style.top = "0px";
                 body.style.bottom = "0px";
@@ -843,11 +838,6 @@ function countenerfunction(xtype, options) {
                 body.style.right = "0px";
                 body.style.left = "0px";
             }
-
-
-
-
-
             var hoptins = {to: thisOptions['headerPosition'] || "top", size: titlebarheight + "px"};
             IN.setPosition(title, hoptins).objtoside();
 
@@ -879,6 +869,7 @@ function countenerfunction(xtype, options) {
             //<editor-fold defaultstate="collapsed" desc="toolBar">
 
             if (thisOptions['bar']) {
+                
                 var thisbarOtions = thisOptions['bar'] || null;
                 var actionsbar = IN.setTag("div", {
                     class: xtype + "-actions-bar  actions-bar e-actions-bar "
@@ -889,10 +880,7 @@ function countenerfunction(xtype, options) {
                 if (!thisbarOtions['columns']) {
                     thisbarOtions['columns'] = thisOptions['columns'];
                 }
-
-
-
-
+                
                 var barOffest = "0px";
                 if (thisbarOtions['position'] === thisOptions['headerPosition']) {
                     barOffest = titlebarheight + "px";
@@ -900,10 +888,7 @@ function countenerfunction(xtype, options) {
                 var poptins = {to: thisbarOtions['position'] || "bottom", offset: barOffest, size: barSize + "px"};
                 poptins[thisOptions['headerPosition']] = titlebarheight + "px";
 
-
                 IN.setPosition(actionsbar, poptins).objtoside();
-
-
                 actionsbar.appendChild(new html(thisbarOtions['items'], thisbarOtions['columns'], panelid)._renderobject());
                 panel.appendChild(actionsbar);
 
@@ -911,9 +896,10 @@ function countenerfunction(xtype, options) {
 
                     mysize += barSize;
                 }
+                
+                
             }
-
-
+            //</editor-fold>
 
 
             if (thisOptions['headerPosition'] === "bottom") {
@@ -928,11 +914,7 @@ function countenerfunction(xtype, options) {
             } else {
                 body.style.top = mysize + "px";
                 body.style.bottom = "0px";
-
             }
-
-            //</editor-fold>
-
             panel.appendChild(body);
             //</editor-fold>
             w.appendChild(panel);
