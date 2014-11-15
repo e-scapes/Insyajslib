@@ -24,6 +24,9 @@ body {
 
 }
 
+.window-actions-bar{
+ background:  #eee;
+}
 .titlebar{
     border-bottom-style: solid;
     border-bottom-width: 1px;
@@ -81,7 +84,7 @@ body {
 
 .e-titlebar .window_title_data {
     margin-left: 10px;
-    position: absolute;
+    position: relative;
     top: 5px;
 }
 
