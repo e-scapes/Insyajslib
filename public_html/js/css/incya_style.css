@@ -9,14 +9,27 @@ body {
 
 
 
+.tabs .header 
+{
+    position: absolute;
+    top:0;background-color: #f5f5f5;
+    width:100%;}
+.tabs .header .tabs_title {
+    right:auto !important;
+    float: left;
+    left:auto !important;
+    min-width: 50px;
+    cursor: pointer
+
+} 
 
 
+.tabs .header .tabs_title.selected {
+   background-color: #666; 
+    
+}
 
-
-
-
-
-.e-countener{
+.i-countener{
 
     -webkit-box-shadow: 1px 1px 7px 1px rgba(128,128,128,0.2);
     box-shadow: 1px 1px 7px 1px rgba(128,128,128,0.2);
@@ -25,7 +38,7 @@ body {
 }
 
 .window-actions-bar{
- background:  #eee;
+    background:  #eee;
 }
 .titlebar{
     border-bottom-style: solid;
@@ -37,7 +50,7 @@ body {
     border-radius: 4px 4px 0 0;
 
 
-    line-height: 29px;
+    line-eight: 29px;
 
 
 
@@ -50,7 +63,7 @@ body {
 
 }
 
-.e-input input[type="button"] {
+.i-input input[type="button"] {
 
     background-image: url('textures/highlight.png');
     background-image: none,-webkit-linear-gradient(top,rgba(255,255,255,.6) 0,rgba(255,255,255,.0) 100%);
@@ -61,14 +74,14 @@ body {
     margin-bottom: 5px;
 }
 
-.e-title{
-    line-height: 29px;
+.i-title{
+    lini-height: 29px;
 }
 
-.e-input-block{
+.i-input-block{
     margin-top: 5px;padding-top: 5px;
 }
-.e-input input{
+.i-input input{
     border-radius: 3px;
     height: 1.65em;
     line-height: 1.65em;
@@ -82,18 +95,18 @@ body {
 }
 
 
-.e-titlebar .window_title_data {
+.i-titlebar .window_title_data {
     margin-left: 10px;
     position: relative;
     top: 5px;
 }
 
-.e-input input{
+.i-input input{
     width:100%;
 }
 
 
-.e-content{
+.i-content{
     overflow: auto;
     position: absolute;
     top:29px;
@@ -103,14 +116,14 @@ body {
 }
 
 
-.e-window-actions , .e-tabs-actions{
+.i-window-actions , .i-tabs-actions{
     float: right;
     margin-right: 5px;
 
 }
 
 
-.e-window-actions i ,.e-tabs-actions i{
+.i-window-actions i ,.i-tabs-actions i{
 
     font-size: 12px;
     padding:  5px  ;  width: 15px;
@@ -124,12 +137,12 @@ body {
 
 
 
-.e-panelsitem ,.panelsitem{
+.i-panelsitem ,.panelsitem{
     position: relative;
     float: left;    
 }
 
-.e-accordionitem,.accordionitem{
+.i-accordionitem,.accordionitem{
     position: relative;
     float: left;    
     width:100%;
@@ -146,34 +159,34 @@ body {
 
 
 
-.e-countener{
+.i-countener{
     -webkit-box-shadow: 1px 1px 7px 1px rgba(128,128,128,0.2);
     box-shadow: 1px 1px 7px 1px rgba(128,128,128,0.2);
 }
 
-.e-countener,.titlebar,.e-input input[type="button"],.e-input input {
+.i-countener,.titlebar,.i-input input[type="button"],.i-input input {
     border-color: #c5c5c5;
 }
-.titlebar ,.e-input input[type="button"] {
+.titlebar ,.i-input input[type="button"] {
     background-color: #f5f5f5;
 }
-.e-countener ,.e-content{
+.i-countener ,.i-content{
     background-color: #fff;
 }
 
 .titlebar{
     color: #333;
 }
-.e-input input[type="button"] {
+.i-input input[type="button"] {
     color: #2e2e2e;
 }
-.e-window-actions i ,.e-tabs-actions i{
+.i-window-actions i ,.i-tabs-actions i{
     color: #666;
 }
-.e-countener,.titlebar,.e-input input[type="button"],.e-input input {
+.i-countener,.titlebar,.i-input input[type="button"],.i-input input {
     border-width: 1px;
 }
-.e-window-actions i:hover{
+.i-window-actions i:hover{
     background: #666;
     color: #fff;
 }
@@ -186,15 +199,15 @@ body {
 
 /*
 
-.e-headerPosition-right .titlebar,
-.e-headerPosition-left .titlebar
+.i-headerPosition-right .titlebar,
+.i-headerPosition-left .titlebar
 {
     left:auto;
     bottom:0px;
     width:29px;
 }
-.e-headerPosition-right .window-content,
-.e-headerPosition-left .window-content
+.i-headerPosition-right .window-content,
+.i-headerPosition-left .window-content
 {
     top:0px;
     right:29px;
@@ -203,20 +216,20 @@ body {
 
 
 
-.e-headerPosition-left .titlebar
+.i-headerPosition-left .titlebar
 {
     left:0;
     right:auto
 }
 
-.e-headerPosition-bottom .titlebar
+.i-headerPosition-bottom .titlebar
 {
     bottom:0;
     top:auto
 }
 
 
-.e-headerPosition-bottom .window-content
+.i-headerPosition-bottom .window-content
 {
     top:0px;
     bottom:29px;
@@ -226,14 +239,14 @@ body {
 
 
 
-.e-headerPosition-left .window-content
+.i-headerPosition-left .window-content
 {
     left:29px;
     right:0
 }
 
-.e-headerPosition-right .e-window-actions
-,.e-headerPosition-left .e-window-actions
+.i-headerPosition-right .i-window-actions
+,.i-headerPosition-left .i-window-actions
 {
     position: absolute;
     bottom: 10px;
@@ -244,9 +257,9 @@ body {
 
 
 
-.e-headerPosition-right  .titlebar .window_title_data 
+.i-headerPosition-right  .titlebar .window_title_data 
 
-,.e-headerPosition-left  .titlebar .window_title_data
+,.i-headerPosition-left  .titlebar .window_title_data
 
 {
     width:auto;
@@ -261,9 +274,9 @@ body {
         ;
     margin: 0px;
 
-}.e-headerPosition-right  .titlebar .window_title_data  span,
-.e-headerPosition-left  .titlebar .window_title_data  span{
-    white-space: nowrap;
+}.i-headerPosition-right  .titlebar .window_title_data  span,
+.i-headerPosition-left  .titlebar .window_title_data  span{
+    whiti-space: nowrap;
     position: absolute;
     -webkit-transform: rotate(90deg);
     -moz-transform: rotate(90deg);
@@ -276,35 +289,35 @@ body {
 
 */
 
-// e-title-position-left
+// i-titli-position-left
 
 
 
 
-.e-title-position-right .e-title
-,.e-title-position-left .e-title
-,.e-title-position-right .e-input
-,.e-title-position-left .e-input
+.i-titli-position-right .i-title
+,.i-titli-position-left .i-title
+,.i-titli-position-right .i-input
+,.i-titli-position-left .i-input
 {
     float: left;
 }
-.e-title-position-right .e-title
-,.e-title-position-left .e-title{
+.i-titli-position-right .i-title
+,.i-titli-position-left .i-title{
     width:30%;
 }
-.e-title-position-right .e-input 
-,.e-title-position-left .e-input{
+.i-titli-position-right .i-input 
+,.i-titli-position-left .i-input{
     width:70% ;
 }
-.e-title-position-right .e-title{
+.i-titli-position-right .i-title{
     text-align: right;
     float: right;
 }
-.e-title-position-left .e-title{
+.i-titli-position-left .i-title{
     float: left;
 
 }
-.e-title-position-left .e-input{
+.i-titli-position-left .i-input{
     float: right;
 
 }

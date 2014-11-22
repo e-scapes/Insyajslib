@@ -216,6 +216,64 @@ function positionFunction(ob, options) {
 
 }
 
+function attrs(obj) {
+
+    obj = IN.getObject(obj);
+
+    this.addClass = function(ClassName) {
+        obj.classList.add(ClassName)
+        return obj;
+    };
+    this.removeClass = function(ClassName) {
+        obj.classList.remove(ClassName)
+        return obj;
+    };
+
+
+    this.adds = function(attrs) {
+        for (var i in attrs) {
+            obj.setAttribute(i, attrs [i]);
+        }
+        return obj;
+    };
+
+
+    this.add = function(attrName, AttrValue) {
+        obj.setAttribute(attrName, AttrValue);
+        return obj;
+    };
+
+    this.data = function(name, value) {
+        obj.setAttribute("data-" + name, value);
+
+        return obj;
+    };
+
+
+    this.datas = function(attrs) {
+
+        for (var i in attrs) {
+
+
+            obj.setAttribute("data-" + i, attrs[i]);
+            console.log(obj);
+        }
+        return obj;
+    };
+
+    this.getData = function(name, value) {
+
+        return         obj.getAttribute("data-" + name);
+
+
+    }
+
+
+}
+
+
+
+
 function setTagFunction(type, options) {
 
     var r = document.createElement(type);
@@ -248,6 +306,9 @@ function setTagFunction(type, options) {
     }
     return r;
 }
+
+
+
 
 function setEventsActionsFunction(object, type, options) {
 
@@ -335,7 +396,6 @@ function setEventsActionsFunction(object, type, options) {
             }
 
         }
-
 
 
 
@@ -735,8 +795,13 @@ function countenerfunction(xtype, options) {
         var w = IN.setTag("div", {
             height: myheight,
             width: mywidth,
-            class: xtype + " e-countener " + myid + headerPosition + barPosition
+            class: xtype + " i-countener " + myid + headerPosition + barPosition
         });
+        var whaeder = IN.setTag("div", {
+            class: " header "
+
+        })
+
         var panelsoptions = [];
         if (options['panels'])
         {
@@ -763,9 +828,9 @@ function countenerfunction(xtype, options) {
 
             var panelid = IN.xactions().uniqid();
             var panelo = {
-                class: xtype + "item " + panelid
+                class: "i-panelitem " + panelid
             };
-            if (xtype === "e-panels") {
+            if (xtype === "i-panels") {
 
                 panelo.height = panelsoptions[i]['height'];
                 panelo.width = panelsoptions[i]['width'];
@@ -775,29 +840,83 @@ function countenerfunction(xtype, options) {
             //<editor-fold defaultstate="collapsed" desc="titleBar">
 
             var titleo = {
-                class: xtype + "_title titlebar e-titlebar"
+                class: xtype + "_title titlebar i-titlebar"
             };
-            if (xtype === "e-accordion") {
+
+            var body = IN.setTag("div", {
+                class: xtype + "-content i-content"
+            });
+
+
+
+            if (xtype === "accordion" || xtype === "tabs") {
+
+                var pheight = (parseFloat(myheight));
+
+                if (xtype === "accordion") {
+
+                    pheight -= (titlebarheight * (panelsoptions.length - 1));
+
+
+                    //  title.style.position = "absolute";
+                } else
+
+
+                if (xtype === "tabs") {
+                    titleo.width = (100 / panelsoptions.length) + "100%";
+
+                }
+                if (thisOptions['selected'] === true) {
+                    panel.style.height = pheight + "px";
+                    IN.attrs(title).addClass("selected");
+                } else {
+                    body.style.display = "none";
+
+                }
+
                 titleo.onclick = function(e) {
-                    //alert(document.getElementsByClassName(myid)[0].getElementsByClassName("e-accordionitem").length);
 
-                    var eitems = document.getElementsByClassName(myid)[0].getElementsByClassName("e-accordionitem");
+                    var parent = document.getElementsByClassName(IN.attrs(this).getData("parent"))[0];
+
+                    var eitems = document.getElementsByClassName(myid)[0].getElementsByClassName("i-panelitem");
                     for (var r = 0; r < eitems.length; r++) {
+                        eitems[r].getElementsByClassName("i-content")[0].style.display = "none";
 
-                        eitems[r].getElementsByClassName("e-content")[0].style.display = "none";
-                        eitems[r].getElementsByClassName("e-actions-bar")[0].style.display = "none";
-                        eitems[r].style.height = titlebarheight + "px";
+                        if (xtype === "tabs") {
+                            eitems[r].style.height = "0px";
+                        } else {
+
+                            eitems[r].style.height = titlebarheight + "px";
+
+                        }
+
                     }
 
-                    this.parentNode.getElementsByClassName("e-content")[0].style.display = "block";
-                    this.parentNode.getElementsByClassName("e-actions-bar")[0].style.display = "block";
-                    this.parentNode.style.height = (this.parentNode.parentNode.offsetHeight - titlebarheight) + "px";
+                    var eitems = document.getElementsByClassName("tabs_title");
+                    for (var r = 0; r < eitems.length; r++) {
+                        IN.attrs(eitems[r]).removeClass("selected");
+                    }
+
+
+
+                    IN.attrs(this).addClass("selected");
+
+                    parent.getElementsByClassName("i-content")[0].style.display = "block";
+                    parent.style.height = pheight + "px";
+
+
+
                 };
             }
+
             var title = IN.setTag("div", titleo);
-            var body = IN.setTag("div", {
-                class: xtype + "-content e-content"
-            });
+            title.style.position = "relative";
+            panel.style.position = "relative";
+
+            IN.attrs(title).datas({parent: panelid})
+
+
+
             if (panelsoptions[i]['title']) {
                 var titledata = IN.setTag("div", {
                     class: xtype + "_title_data "
@@ -824,7 +943,7 @@ function countenerfunction(xtype, options) {
 
 
             var wactions = IN.setTag("div", {
-                class: "e-window-actions"
+                class: "i-window-actions"
             });
             wactions.style.position = "absolute ";
             wactions.style.bottom = 0 + "px";
@@ -856,8 +975,6 @@ function countenerfunction(xtype, options) {
 
             //</editor-fold>
 
-            title.appendChild(wactions);
-            panel.appendChild(title);
             if (thisOptions['items']) {
                 if (!thisOptions['itemColumns']) {
                     thisOptions['itemColumns'] = thisOptions['columns'];
@@ -868,11 +985,15 @@ function countenerfunction(xtype, options) {
 
             //<editor-fold defaultstate="collapsed" desc="toolBar">
 
+
+            //</editor-fold>
+
+
             if (thisOptions['bar']) {
-                
+
                 var thisbarOtions = thisOptions['bar'] || null;
                 var actionsbar = IN.setTag("div", {
-                    class: xtype + "-actions-bar  actions-bar e-actions-bar "
+                    class: xtype + "-actions-bar  actions-bar i-actions-bar "
                 });
                 actionsbar.style.position = "absolute ";
                 barSize = thisbarOtions['width'] || barSize;
@@ -880,7 +1001,7 @@ function countenerfunction(xtype, options) {
                 if (!thisbarOtions['columns']) {
                     thisbarOtions['columns'] = thisOptions['columns'];
                 }
-                
+
                 var barOffest = "0px";
                 if (thisbarOtions['position'] === thisOptions['headerPosition']) {
                     barOffest = titlebarheight + "px";
@@ -896,10 +1017,10 @@ function countenerfunction(xtype, options) {
 
                     mysize += barSize;
                 }
-                
-                
+
+
             }
-            //</editor-fold>
+
 
 
             if (thisOptions['headerPosition'] === "bottom") {
@@ -912,14 +1033,25 @@ function countenerfunction(xtype, options) {
                 body.style.right = mysize + "px";
                 body.style.left = "0px";
             } else {
+
                 body.style.top = mysize + "px";
                 body.style.bottom = "0px";
+            }
+
+
+            if (xtype === "tabs") {
+                whaeder.appendChild(title);
+            } else {
+                panel.appendChild(title);
+                title.appendChild(wactions);
             }
             panel.appendChild(body);
             //</editor-fold>
             w.appendChild(panel);
         }
-
+        if (xtype === "tabs") {
+            w.appendChild(whaeder);
+        }
         IN.setPosition(w, options).update();
         return w;
     }
@@ -1003,6 +1135,9 @@ function setEffectFunction(type, obj) {
 var IN = {
     setting: function() {
 
+    },
+    attrs: function(obj) {
+        return new attrs(obj);
     },
     xcreate: function(xtype, options) {
         return new createfunction(xtype, options);
